@@ -24,7 +24,9 @@
             </div>
           </div>
           <div class="paper__main">
-            <agenda v-for="agenda in root" :agenda="agenda"></agenda>
+            <ul>
+              <agenda v-for="agenda in root" :agenda="agenda"></agenda>
+            </ul>
           </div>
         </li>
         <li class="paper">
@@ -60,17 +62,8 @@ export default {
     return {
       root: [
         {
-          title: 'アジェンダタイトル1',
-          children: [
-            {
-              title: '子アジェンダ1',
-              children: []
-            },
-            {
-              title: '子アジェンダ2',
-              children: []
-            }
-          ]
+          title: '',
+          children: []
         }
       ]
     }
@@ -78,7 +71,7 @@ export default {
   methods: {
     addAgenda: function () {
       this.root.push({
-        title: 'new agenda',
+        title: '',
         children: []
       })
     }
@@ -142,7 +135,7 @@ body {
 .content > ul {
   width: 100%;
   flex: 1;
-  padding: 60px 90px;
+  padding: 30px 90px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -192,6 +185,10 @@ body {
   padding: 60px;
   flex-direction: column;
   flex-wrap: nowrap;
+}
+
+.paper__main > ul {
+  flex-direction: column;
 }
 
 </style>
