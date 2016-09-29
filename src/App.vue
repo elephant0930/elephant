@@ -23,6 +23,9 @@
               </ul>
             </div>
           </div>
+          <div class="paper__main">
+            <agenda v-for="agenda in root" :agenda="agenda"></agenda>
+          </div>
         </li>
         <li class="paper">
           <div class="paper__header">
@@ -47,11 +50,38 @@
 </template>
 
 <script>
-import Hello from './components/Hello'
+import Agenda from './components/Agenda'
 
 export default {
   components: {
-    Hello
+    Agenda
+  },
+  data () {
+    return {
+      root: [
+        {
+          title: 'アジェンダタイトル1',
+          children: [
+            {
+              title: '子アジェンダ1',
+              children: []
+            },
+            {
+              title: '子アジェンダ2',
+              children: []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  methods: {
+    addAgenda: function () {
+      this.root.push({
+        title: 'new agenda',
+        children: []
+      })
+    }
   }
 }
 </script>
@@ -85,7 +115,7 @@ body {
 }
 
 .list {
-  width: 240px;
+  width: 60px;
   height: 100%;
   background: #fff;
   z-index: 100;
@@ -112,7 +142,7 @@ body {
 .content > ul {
   width: 100%;
   flex: 1;
-  padding: 60px 120px;
+  padding: 60px 90px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -120,7 +150,6 @@ body {
 .content > ul > li.paper {
   flex-direction: column;
   width: 100%;
-  height: 800px;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   margin: 30px 0;
@@ -155,6 +184,14 @@ body {
 .paper__header__users > ul > li > img {
   width: 20px;
   height: 20px;
+}
+
+.paper__main {
+  width: 100%;
+  flex: 1;
+  padding: 60px;
+  flex-direction: column;
+  flex-wrap: nowrap;
 }
 
 </style>
