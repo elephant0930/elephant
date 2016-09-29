@@ -134,7 +134,7 @@ body {
   height: 60px;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  z-index: 60;
+  z-index: 70;
   justify-content: center;
   align-items: center;
 }
