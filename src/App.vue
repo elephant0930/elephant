@@ -24,9 +24,7 @@
             </div>
           </div>
           <div class="paper__main">
-            <ul>
-              <agenda v-for="agenda in root" :agenda="agenda"></agenda>
-            </ul>
+            <agenda :agenda="agenda" :root="true" :i="0" :focus.sync="focus"></agenda>
           </div>
         </li>
         <li class="paper">
@@ -60,20 +58,16 @@ export default {
   },
   data () {
     return {
-      root: [
-        {
-          title: '',
-          children: []
-        }
-      ]
-    }
-  },
-  methods: {
-    addAgenda: function () {
-      this.root.push({
+      agenda: {
         title: '',
-        children: []
-      })
+        children: [
+          {
+            title: '',
+            children: []
+          }
+        ]
+      },
+      focus: {}
     }
   }
 }
