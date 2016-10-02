@@ -4,7 +4,7 @@
       <!-- <p>{{address}}</p> -->
       <div class="agenda__i">
         <div class="agenda__i--child" @click="addAgenda(0)"></div>
-        <div class="agenda__i--result"></div>
+        <div class="agenda__i--result" @click="result = !result"></div>
       </div>
       <input @keydown.enter="keydownEnter($event)" v-model="agenda.title" placeholder="Type a new agenda" type="text">
     </div>
@@ -18,6 +18,12 @@
           <div class="agenda-add__button" @click="addAgenda(agenda.children.length)"></div>
         </div>
       </ul>
+    </div>
+    <div class="agenda__result" v-show="result">
+      <div class="agenda__result__button"></div>
+      <div class="agenda__result__text" contentEditable="true">
+        <p>ここに結果をかきましょー、ここに結果をかきましょー、ここに結果をかきましょー、ここに結果をかきましょー</p>
+      </div>
     </div>
   </div>
 </template>
@@ -42,7 +48,8 @@ export default {
   props: ['agenda', 'i', 'root', 'focus'],
   data () {
     return {
-      close: false
+      close: false,
+      result: false
     }
   },
   methods: {
@@ -353,7 +360,7 @@ export default {
 .agenda-add__button {
   width: 20px;
   height: 20px;
-  top: 10px;
+  top: 5px;
   left: 5px;
   position: absolute;
   cursor: pointer;
@@ -378,6 +385,68 @@ export default {
   height: 0px;
   margin: 0 0;
   opacity: 0;
+}
+
+.agenda__result {
+  width: 100%;
+  min-height: 30px;
+  margin: 5px 0;
+  background: #eee;
+  position: relative;
+  border-radius: 15px;
+  /*display: none;*/
+}
+
+.agenda--top > .agenda__result {
+  min-height: 70px;
+  margin: 10px 0;
+  border-radius: 25px;
+}
+
+.agenda--root > .agenda__result {
+  display: none;
+}
+
+.agenda__result__button {
+  width: 20px;
+  height: 20px;
+  top: 5px;
+  left: 5px;
+  position: absolute;
+  cursor: pointer;
+  background-image: url("~src/assets/check_big_icon.png");
+  background-color: #fff;
+  background-size: 100%;
+  border-radius: 50%;
+}
+
+.agenda--top > .agenda__result > .agenda__result__button {
+  width: 40px;
+  height: 40px;
+  top: 5px;
+  left: 5px;
+}
+
+.agenda__result__text {
+  width: 100%;
+  padding: 5px 5px 5px 40px;
+  flex-direction: column;
+}
+
+.agenda--top > .agenda__result > .agenda__result__text {
+  padding: 10px 10px 10px 60px;
+}
+
+.agenda__result__text > p {
+  font-size: 14px;
+  line-height: 20px;
+  flex: 1;
+  display: block;
+}
+
+.agenda--top > .agenda__result > .agenda__result__text > p {
+  font-size: 18px;
+  line-height: 30px;
 }
 
 </style>
