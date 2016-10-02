@@ -3,7 +3,7 @@
     <div v-if="!root" class="agenda__title">
       <!-- <p>{{address}}</p> -->
       <div class="agenda__i">
-        <div class="agenda__i--child"></div>
+        <div class="agenda__i--child" @click="addAgenda(0)"></div>
         <div class="agenda__i--result"></div>
       </div>
       <input @keydown.enter="keydownEnter($event)" v-model="agenda.title" placeholder="Type a new agenda" type="text">
@@ -14,6 +14,9 @@
       </div>
       <ul>
         <agenda v-for="(agenda, i) in agenda.children" :agenda="agenda" :i="i" :root="false" :focus.sync="focus"></agenda>
+        <div class="agenda-add" v-if="agenda.children.length">
+          <div class="agenda-add__button" @click="addAgenda(agenda.children.length)"></div>
+        </div>
       </ul>
     </div>
   </div>
@@ -333,6 +336,48 @@ export default {
   padding-left: 0px;
   margin-left: 0px;
   position: relative;
+}
+
+.agenda-add {
+  width: 100%;
+  height: 30px;
+  margin: 5px 0;
+  position: relative;
+}
+
+.agenda--root > div > ul > .agenda-add {
+  height: 70px;
+  margin: 10px 0;
+}
+
+.agenda-add__button {
+  width: 20px;
+  height: 20px;
+  top: 10px;
+  left: 5px;
+  position: absolute;
+  cursor: pointer;
+  background-image: url("~src/assets/plus_big_icon.png");
+  background-color: #fff;
+  background-size: 100%;
+  border-radius: 50%;
+}
+
+.agenda--root > div > ul > .agenda-add > .agenda-add__button {
+  width: 40px;
+  height: 40px;
+  top: 15px;
+  left: 5px;
+}
+
+.agenda-add__button:hover {
+  box-shadow: 0 0 0 4px rgba(244, 108, 11, 0.2);
+}
+
+.close .agenda-add {
+  height: 0px;
+  margin: 0 0;
+  opacity: 0;
 }
 
 </style>
