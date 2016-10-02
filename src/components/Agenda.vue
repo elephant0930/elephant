@@ -1,13 +1,21 @@
 <template>
-  <div :class="['agenda', { 'agenda--root': root}]">
-    <div v-if="!root">
-      <p>{{address}}</p>
-      <img src="~src/assets/world_icon.png" width=40 height=40>
+  <div :class="['agenda', {'agenda--root': root}, {'close': close}, , {'agenda--top': (address.length === 2)}]">
+    <div v-if="!root" class="agenda__title">
+      <!-- <p>{{address}}</p> -->
+      <div class="agenda__i">
+        <div class="agenda__i--child"></div>
+        <div class="agenda__i--result"></div>
+      </div>
       <input @keydown.enter="keydownEnter($event)" v-model="agenda.title" placeholder="Type a new agenda" type="text">
     </div>
-    <ul>
-      <agenda v-for="(agenda, i) in agenda.children" :agenda="agenda" :i="i" :root="false" :focus.sync="focus"></agenda>
-    </ul>
+    <div class="agenda__children">
+      <div class="agenda__line" @click="close = !close">
+        <div></div>
+      </div>
+      <ul>
+        <agenda v-for="(agenda, i) in agenda.children" :agenda="agenda" :i="i" :root="false" :focus.sync="focus"></agenda>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -29,20 +37,25 @@ export default {
     }
   },
   props: ['agenda', 'i', 'root', 'focus'],
+  data () {
+    return {
+      close: false
+    }
+  },
   methods: {
     keydownEnter: function (event) {
       event.shiftKey ? this.addAgenda() : this.$parent.addAgenda(this.i)
     },
     addAgenda: function (i) {
       this.agenda.children.splice(i + 1, 0, { title: '', children: [] })
-      this.focus = this.address.concat([i + 1])
+      // this.focus = this.address.concat([i + 1])
     }
   },
   watch: {
     'focus': {
       handler: function (val, oldVal) {
         console.log(val)
-        console.log(this.address)
+        // console.log(this.address)
       }
     }
   }
@@ -56,6 +69,10 @@ export default {
   position: relative;
 }
 
+.close .agenda {
+  pointer-events: none;
+}
+
 .agenda:hover {
   /*box-shadow: 0 1px  4px rgba(0,0,0,0.2);*/
 }
@@ -64,60 +81,258 @@ export default {
   box-shadow: 0 1px  4px rgba(0,0,0,0.0);
 }
 
-.agenda > div {
-  padding: 5px;
+.agenda--top {
   margin: 10px 0px;
-  border-radius: 2px;
 }
 
-.agenda > div:hover {
+.agenda__title {
+  margin: 5px 0px;
+  border-radius: 2px;
+  background: rgba(0,0,0,0.0);
+  position: relative;
+  border-radius: 100px;
+}
+
+.agenda--top > .agenda__title {
+  margin: 10px 0px;
+}
+
+.close > .agenda__children .agenda__title {
+  margin: 0px 0px;
+}
+
+.agenda__title:hover {
   background: rgba(0,0,0,0.05);
 }
 
-.agenda > ul {
-  flex-direction: column;
-  padding-left: 40px;
-  margin-left: 5px;
-}
-
-.agenda > div > p {
+.agenda__title > p {
   position: absolute;
   font-size: 9px;
   font-weight: 700;
   color: rgba(0,0,0,0.3);
   background: rgba(255,255,255,0.2);
+  opacity: 0.0;
 }
 
-.agenda > div > img {
+.agenda__title > .agenda__i {
   width: 20px;
   height: 20px;
+  top: 5px;
+  left: 5px;
+  position: absolute;
+  cursor: pointer;
 }
 
-.agenda > div > input {
+.agenda__title > .agenda__i:hover {
+  z-index: 100;
+}
+
+.agenda__title > .agenda__i:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("~src/assets/world_icon.png");
+  background-color: #fff;
+  background-size: 100%;
+  border-radius: 50%;
+}
+
+.agenda__title > .agenda__i:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.0);
+  border-radius: 50%;
+}
+
+.agenda__title > .agenda__i:hover:before {
+  top: -22px;
+  left: -22px;
+  bottom: -22px;
+  right: -22px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.06);
+}
+
+.agenda--top > .agenda__title > .agenda__i:hover:before {
+  top: -44px;
+  left: -44px;
+  bottom: -44px;
+  right: -44px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.06);
+}
+
+
+.agenda--top > .agenda__title > .agenda__i {
+  width: 40px;
+  height: 40px;
+}
+
+.close > .agenda__children .agenda__title > .agenda__i {
+  top: 2px;
+  left: 2px;
+  width: 6px;
+  height: 6px;
+  box-shadow: 0 0 0 1px #f26d25 inset;
+  border-radius: 50%;
+}
+
+.agenda__i--child {
+  width: 10px;
+  height: 10px;
+  top: 5px;
+  left: 5px;
+  background-color: #fff;
+  background-image: url("~src/assets/plus_icon.png");
+  background-size: 100%;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.agenda__i--child:hover {
+  box-shadow: 0 0 0 4px rgba(244, 108, 11, 0.2);
+}
+
+.agenda__i:hover > .agenda__i--child {
+  top: 20px;
+  left: 20px;
+}
+
+.agenda--top > div > div > .agenda__i--child {
+  width: 20px;
+  height: 20px;
+  top: 10px;
+  left: 10px;
+}
+
+.agenda--top > div > .agenda__i:hover > .agenda__i--child {
+  top: 40px;
+  left: 40px;
+}
+
+.close > .agenda__children .agenda__i--child {
+  opacity: 0.0;
+}
+
+.agenda__i--result {
+  width: 10px;
+  height: 10px;
+  top: 5px;
+  left: 5px;
+  background-color: #fff;
+  background-image: url("~src/assets/check_icon.png");
+  background-size: 100%;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.agenda__i--result:hover {
+  box-shadow: 0 0 0 4px rgba(108, 212, 87, 0.2);
+}
+
+.agenda__i:hover > .agenda__i--result {
+  top: 26px;
+  left: 5px;
+}
+
+.agenda--top > div > div > .agenda__i--result {
+  width: 20px;
+  height: 20px;
+  top: 10px;
+  left: 10px;
+}
+
+.agenda--top > div > .agenda__i:hover > .agenda__i--result {
+  top: 52px;
+  left: 10px;
+}
+
+.close > .agenda__children .agenda__i--result {
+  opacity: 0.0;
+}
+
+
+
+.agenda__title > input {
   flex: 1;
-  margin-left: 20px;
+  padding: 5px 5px 5px 40px;
+  height: 30px;
   font-size: 14px;
-  letter-spacing: 0.6px;
+  /*letter-spacing: 0.1rem;*/
+}
+
+.agenda--top > .agenda__title > input {
+  font-size: 18px;
+  padding: 5px 5px 5px 60px;
+  height: 50px;
+}
+
+.close > .agenda__children .agenda__title > input {
+  font-size: 10px;
+  height: 10px;
+  padding: 0px 5px 0px 15px;
+}
+
+
+.agenda__children {
+  flex-direction: row;
+}
+
+.agenda__line {
+  width: 20px;
+  background: rgba(0,0,0,0.0);
+  margin: 0 5px;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.agenda--top > .agenda__children > .agenda__line {
+  width: 40px;
+}
+
+.agenda--root > .agenda__children > .agenda__line {
+  display: none;
+}
+
+.close > .agenda__children .agenda__children .agenda__line {
+  width: 6px;
+  margin: 0;
+}
+
+.agenda__children > .agenda__line > div {
+  flex: 1;
+  width: 2px;
+  background: #ddd;
+  border-radius: 1px;
+}
+
+.agenda__children > .agenda__line:hover > div {
+  flex: 1;
+  width: 4px;
+  background: #ccc;
+  border-radius: 2px;
+}
+
+.close > .agenda__children .agenda__children .agenda__line > div {
+  opacity: 0;
+}
+
+.agenda__children > ul {
+  flex: 1;
+  flex-direction: column;
 }
 
 .agenda--root > ul {
   padding-left: 0px;
   margin-left: 0px;
-}
-
-.agenda--root > ul > .agenda > div {
-  margin: 20px 0px;
-}
-
-.agenda--root > ul > .agenda > div > img {
-  width: 40px;
-  height: 40px;
-}
-
-.agenda--root > ul > .agenda > div > input {
-  margin-left: 20px;
-  font-size: 18px;
-  letter-spacing: 0.6px;
+  position: relative;
 }
 
 </style>

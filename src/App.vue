@@ -22,6 +22,7 @@
                 </li>
               </ul>
             </div>
+            <div>{{focus}}</div>
           </div>
           <div class="paper__main">
             <agenda :agenda="agenda" :root="true" :i="0" :focus.sync="focus"></agenda>
@@ -98,7 +99,7 @@ body {
 .nav {
   width: 60px;
   height: 100%;
-  background: #1C293A;
+  background: #2b405c;
 }
 
 .list {
